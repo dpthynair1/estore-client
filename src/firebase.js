@@ -1,5 +1,6 @@
 import firebase from 'firebase'
-//require('firebase/auth')
+//import 'firebase/auth'
+require('firebase/auth')
 //import * as firebase from "firebase";
 
   // Your web app's Firebase configuration

@@ -5,6 +5,7 @@ import { Button } from "antd";
 import { MailOutlined, GoogleOutlined } from "@ant-design/icons";
 import { useDispatch, useSelector } from "react-redux";
 import { Link } from "react-router-dom";
+import { createOrUpdateUser } from "../../functions/auth";
 
 const Login = ({ history }) => {
   const [email, setEmail] = useState("");
@@ -15,8 +16,28 @@ const Login = ({ history }) => {
   const { user } = useSelector((state) => ({ ...state }));
 
   useEffect(() => {
-    if (user && user.token) history.push("/");
-  }, [user]);
+    if (history.location.state) {
+      return;
+    } else {
+      if (user && user.token) history.push("/");
+    }
+    // if (user && user.token) history.push("/");
+  }, [user, history]);
+
+  const roleBasedRedirect = (res) => {
+    // Check for intended routes else redirect to respective dashboards
+    let intended = history.location.state;
+
+    if (intended) {
+      history.push(intended.from);
+    } else {
+      if (res.data.role === "admin") {
+        history.push("/admin/dashboard");
+      } else {
+        history.push("/user/history");
+      }
+    }
+  };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -27,15 +48,23 @@ const Login = ({ history }) => {
 
       const { user } = result;
       const idTokenResult = await user.getIdTokenResult();
+      createOrUpdateUser(idTokenResult.token)
+        .then((res) => {
+          dispatch({
+            type: "LOGGED_IN_User",
+            payload: {
+              name: res.data.email.split("@")[0],
+              email: res.data.email,
+              token: idTokenResult.token,
+              role: res.data.role,
+              _id: res.data._id,
+            },
+          });
+          roleBasedRedirect(res);
+        })
+        .catch((err) => console.log(err));
 
-      dispatch({
-        type: "LOGGED_IN_User",
-        payload: {
-          email: user.email,
-          token: idTokenResult.token,
-        },
-      });
-      history.push("/");
+      // history.push("/");
     } catch (error) {
       console.log(error);
       toast.error(error.message);
@@ -49,14 +78,22 @@ const Login = ({ history }) => {
       .then(async (result) => {
         const { user } = result;
         const idTokenResult = await user.getIdTokenResult();
-        dispatch({
-          type: "LOGGED_IN_User",
-          payload: {
-            email: user.email,
-            token: idTokenResult.token,
-          },
-        });
-        history.push("/");
+        createOrUpdateUser(idTokenResult.token)
+          .then((res) => {
+            dispatch({
+              type: "LOGGED_IN_User",
+              payload: {
+                name: res.data.email.split("@")[0],
+                email: res.data.email,
+                token: idTokenResult.token,
+                role: res.data.role,
+                _id: res.data._id,
+              },
+            });
+            roleBasedRedirect(res);
+          })
+          .catch((err) => console.log(err));
+        //  history.push("/");
       })
       .catch((err) => {
         console.log(err);
@@ -98,7 +135,7 @@ const Login = ({ history }) => {
         size="large"
         disabled={!email || password.length < 6}
       >
-      Continue To Login
+        Continue To Login
       </Button>
 
       <br />

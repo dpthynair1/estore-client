@@ -1,16 +1,19 @@
 import React, { useState, useEffect } from "react";
-import { auth } from "../../firebase";
+// import { auth, } from "../../firebase/auth";
+import { auth } from "../../firebase.js";
+
+// import { getAuth, sendPasswordResetEmail } from "firebase/auth";
 import { toast } from "react-toastify";
 import { useSelector } from "react-redux";
-
+// const auth = getAuth();
 const ForgotPassword = ({ history }) => {
   const [email, setEmail] = useState("");
   const [loading, setLoading] = useState(false);
-  const {user} = useSelector((state) => ({...state}));
+  const { user } = useSelector((state) => ({ ...state }));
 
-  useEffect (() => {
-    if(user && user.token)  history.push('/')
-  },[user,history])
+  useEffect(() => {
+    if (user && user.token) history.push('/')
+  }, [user, history])
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -21,18 +24,16 @@ const ForgotPassword = ({ history }) => {
       handleCodeInApp: true,
     };
 
-    await auth
-      .sendPasswordResetEmail(email, config)
-      .then(() => {
-        setEmail("");
-        setLoading(false);
-        toast.success("Check your email for password reset link");
-      })
-      .catch((error) => {
-        setLoading(false);
-        toast.error(error.message);
-        console.log("ERROR MSG IN FORGOT PASSWORD", error);
-      });
+    try {
+      await auth.sendPasswordResetEmail(email, config);
+      setEmail("");
+      setLoading(false);
+      toast.success("Check your email for password reset link");
+    } catch (error) {
+      setLoading(false);
+      toast.error(error.message);
+      console.log("ERROR MSG IN FORGOT PASSWORD", error);
+    }
   };
 
   return (

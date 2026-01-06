@@ -95,7 +95,7 @@ const ProductCardInCheckout = ({ p }) => {
       <tr>
         <td>
           <div style={{ width: "100px", height: "auto" }}>
-            {p.images.length ? (
+            {p.images?.length ? (
               <ModalImage small={p.images[0].url} large={p.images[0].url} />
             ) : (
               <ModalImage small={laptop} large={laptop} />
@@ -125,7 +125,7 @@ const ProductCardInCheckout = ({ p }) => {
               ))}
           </select>
         </td>
-        <td className="text-center" style={{'width': '35px'}}>
+        <td className="text-center" style={{ 'width': '35px' }}>
           <input
             type="number"
             className="form-control text-center"

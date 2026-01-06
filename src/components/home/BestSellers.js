@@ -16,15 +16,15 @@ const BestSellers = () => {
 
   useEffect(() => {
     getProductsCount()
-    .then((res) => {
+      .then((res) => {
         setProductsCount(res.data)
-    })
+      })
   }, []);
 
   const loadAllProducts = () => {
     setLoading(true);
     // sort, order, limit
-    getProducts("sold", "desc",page).then((res) => {
+    getProducts("sold", "desc", page).then((res) => {
       setProducts(res.data);
       setLoading(false);
     });
@@ -47,15 +47,22 @@ const BestSellers = () => {
       </div>
 
       <div className="row">
-<nav className="col-md-4 offset-md-4 text-center pt-5 p-3">
+        <nav className="col-md-4 offset-md-4 text-center pt-5 p-3">
 
-<Pagination 
+          {/* <Pagination 
       current= {page}
       total= {(productsCount / 3 ) * 10}
       onChange={(value) => setPage(value)}
-      />
-</nav>
-</div>
+      /> */}
+
+          <Pagination
+            current={page}
+            total={productsCount}
+            pageSize={3}  // Number of items per page
+            onChange={(value) => setPage(value)}
+          />
+        </nav>
+      </div>
     </>
   );
 };

@@ -16,9 +16,9 @@ const NewArrivals = () => {
 
   useEffect(() => {
     getProductsCount()
-    .then((res) => {
+      .then((res) => {
         setProductsCount(res.data)
-    })
+      })
   }, []);
 
   const loadAllProducts = () => {
@@ -45,17 +45,18 @@ const NewArrivals = () => {
           </div>
         )}
       </div>
-<div className="row">
-<nav className="col-md-4 offset-md-4 text-center pt-5 p-3">
+      <div className="row">
+        <nav className="col-md-4 offset-md-4 text-center pt-5 p-3">
 
-<Pagination 
-      current= {page}
-      total= {(productsCount / 3 ) * 10}
-      onChange={(value) => setPage(value)}
-      />
-</nav>
-</div>
-      
+          <Pagination
+            current={page}
+            total={productsCount}
+            pageSize={3}  // Number of items per page
+            onChange={(value) => setPage(value)}
+          />
+        </nav>
+      </div>
+
     </>
   );
 };

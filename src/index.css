@@ -1,27 +1,38 @@
-body{
-    background-color: burlywood ;
+body {
+    background-color: burlywood;
 }
 
 
 .slider img,
-.card-image{
-height: 450px;
-object-fit: cover;
-}
-
-.home{
- font-family: 'The Nautigal', cursive;
-    font-size: 40px;
-    color: #75A1AB;
-    padding: 5px;
-}
-
-
-.card-image{
+.card-image {
     height: 450px;
     object-fit: cover;
 }
 
-.pointer{
+.home {
+    font-family: 'The Nautigal', cursive;
+    font-size: 40px;
+    color: #2C5A5D;
+    padding: 5px;
+}
+
+
+.card-image {
+    height: 450px;
+    object-fit: cover;
+}
+
+.pointer {
     cursor: pointer;
+}
+
+
+.card-title {
+    margin-bottom: 1rem;
+}
+
+.text-truncate {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
 }
